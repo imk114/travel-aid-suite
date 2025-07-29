@@ -14,16 +14,190 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      app_users: {
+        Row: {
+          created_at: string
+          full_name: string
+          id: string
+          is_active: boolean
+          password_hash: string
+          role: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          full_name: string
+          id?: string
+          is_active?: boolean
+          password_hash: string
+          role?: string
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string
+          id?: string
+          is_active?: boolean
+          password_hash?: string
+          role?: string
+          updated_at?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      clients: {
+        Row: {
+          client_name: string
+          created_at: string
+          father_name: string
+          id: string
+          id_proof_number: string
+          id_proof_type: Database["public"]["Enums"]["id_proof_type"]
+          mobile_number: string
+          updated_at: string
+        }
+        Insert: {
+          client_name: string
+          created_at?: string
+          father_name: string
+          id?: string
+          id_proof_number: string
+          id_proof_type: Database["public"]["Enums"]["id_proof_type"]
+          mobile_number: string
+          updated_at?: string
+        }
+        Update: {
+          client_name?: string
+          created_at?: string
+          father_name?: string
+          id?: string
+          id_proof_number?: string
+          id_proof_type?: Database["public"]["Enums"]["id_proof_type"]
+          mobile_number?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      expenses: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          description: string
+          expense_date: string
+          id: string
+          notes: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          category: string
+          created_at?: string
+          description: string
+          expense_date?: string
+          id?: string
+          notes?: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          description?: string
+          expense_date?: string
+          id?: string
+          notes?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          booking_date: string
+          client_id: string
+          created_at: string
+          gst_amount: number
+          gst_rate: number
+          id: string
+          payment_mode: Database["public"]["Enums"]["payment_mode"]
+          payment_status: Database["public"]["Enums"]["payment_status"]
+          received_bank_name: string | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          total_amount: number
+          transaction_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          booking_date?: string
+          client_id: string
+          created_at?: string
+          gst_amount: number
+          gst_rate: number
+          id?: string
+          payment_mode: Database["public"]["Enums"]["payment_mode"]
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          received_bank_name?: string | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          total_amount: number
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          booking_date?: string
+          client_id?: string
+          created_at?: string
+          gst_amount?: number
+          gst_rate?: number
+          id?: string
+          payment_mode?: Database["public"]["Enums"]["payment_mode"]
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          received_bank_name?: string | null
+          service_type?: Database["public"]["Enums"]["service_type"]
+          total_amount?: number
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      calculate_gst: {
+        Args: {
+          service_type: Database["public"]["Enums"]["service_type"]
+          amount: number
+        }
+        Returns: number
+      }
+      get_gst_rate: {
+        Args: { service_type: Database["public"]["Enums"]["service_type"] }
+        Returns: number
+      }
     }
     Enums: {
-      [_ in never]: never
+      id_proof_type: "aadhar" | "pan" | "license" | "passport" | "voter_id"
+      payment_method: "cash" | "upi" | "bank"
+      payment_mode: "upi" | "cash" | "bank_transfer"
+      payment_status: "advance" | "pending" | "completed"
+      service_type: "self_drive" | "taxi" | "tour"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +324,12 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      id_proof_type: ["aadhar", "pan", "license", "passport", "voter_id"],
+      payment_method: ["cash", "upi", "bank"],
+      payment_mode: ["upi", "cash", "bank_transfer"],
+      payment_status: ["advance", "pending", "completed"],
+      service_type: ["self_drive", "taxi", "tour"],
+    },
   },
 } as const
